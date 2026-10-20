@@ -53,5 +53,26 @@ EMPTY STRING
 **Conclusion:** So, to use strict types without type juggle need to use declare(strict_type=1)
 
 #### LAB4
+
+Expected:
+- Function strln() will output number of bytes (does not take into account encoding)
+- Function mb_strln() will output  number of characters
+- Function sprintf() return a formatted string, but counts BYTES, not CHARACTERS
+
+Received:
+
+14  
+12  
+14  
+6  
+Hello       |   
+Привіт|  
+Номер  |  
+
+**Conclusion:** 
+- Use strln() when important length in bytes, for example for hashes, binary data, clear ASCII
+- Use mb_strln() when important length in characters, for example for validation user input, work with Cyrillic and other
+- If you need use sprintf() for formating Cyrillic strings, then need to compensate for the difference between bytes and characters
+
 #### LAB5
 
