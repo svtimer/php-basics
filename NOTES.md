@@ -12,7 +12,7 @@ because 0.1 + 0.2 gives float 0.30000000000000004 (because used bin format)  and
 
 - int(1900) 
 
-Conclusion: for store values money need to use kopecks as integer everywhere
+**Conclusion:** for store values money need to use kopecks as integer everywhere
 
 #### LAB2
 Expected:
@@ -33,10 +33,25 @@ Received:
 - bool(true)
 - bool(false)
 
-Conclusion: for get expected behavior when comparing different values with different types need to use === comparator, its never use type conversion when comparing. 
-Conclusion: for get expected behavior when comparing different values with different types need to use === comparator, its never use type conversion when comparing. 
+**Conclusion:** for get expected behavior when comparing different values with different types need to use === comparator, its never use type conversion when comparing. 
 
 #### LAB3
+Expected:
+- Call function f("5") with declare(strict_type=1), return error (because "5" is numeric string, but function takes type int;
+- Call function f("5") without  declare(strict_type=1), calls the function
+
+Received:
+-  Call function f("5") with declare(strict_type=1)   
+Fatal error: Uncaught TypeError: f(): Argument #1 ($x) must be of type int, string given, called in /lab/lab/lab3.php on line 9 and defined in /lab/lab/lab3.php:4  
+Stack trace:  
+#0 /lab/lab/lab3.php(9): f('5')
+#1 {main}
+thrown in /lab/lab/lab3.php on line 4
+- Call function f("5") without  declare(strict_type=1)   
+EMPTY STRING
+
+**Conclusion:** So, to use strict types without type juggle need to use declare(strict_type=1)
+
 #### LAB4
 #### LAB5
 
