@@ -76,3 +76,20 @@ Hello       |
 
 #### LAB5
 
+Expected:
+
+When PHP script is run with arguments Hello 42. Function php_dump($argv) will display array containing arguments of type string 
+
+Received:
+
+array(3) {
+[0]=>
+string(8) "lab5.php"
+[1]=>
+string(5) "hello"
+[2]=>
+string(2) "42"
+
+**Conclusion:**
+
+$argv - Array of argument passed to script when running from a command line, all elements stored as string, first element always the name of the script
