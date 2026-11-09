@@ -14,3 +14,12 @@ $expenses = [
     ['amount' => 9040, 'category' => 'fun', 'date' => '2026-10-13'],
     ['amount' => 19990, 'category' => 'transport', 'date' => '2026-10-14'],
 ];
+
+function formatMoney(int $kopecks = 0): string
+{
+    $amount    = intdiv($kopecks, 100);
+    $kopecks   = $kopecks % 100;
+    $formatted = sprintf('%d.%02d', $amount, $kopecks);
+
+    return $formatted;
+}
