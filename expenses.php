@@ -23,3 +23,14 @@ function formatMoney(int $kopecks = 0): string
 
     return $formatted;
 }
+
+function totalsByCategory(array $expenses): array
+{
+    $totals = [];
+    foreach ($expenses as $item) {
+        $category          = $item['category'];
+        $totals[$category] = ($totals[$category] ?? 0) + $item['amount'];
+    }
+
+    return $totals;
+}
