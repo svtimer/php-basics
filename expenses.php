@@ -44,3 +44,15 @@ function sumForCategory(array $expenses, string $category): int
 
     return array_sum(array_column($filtered, 'amount'));
 }
+
+function filterByMonth(array $expenses, string $month): array
+{
+    $filtered = array_values(
+        array_filter(
+            $expenses,
+            fn($expense) => str_starts_with($expense['date'], $month),
+        ),
+    );
+
+    return $filtered;
+}
