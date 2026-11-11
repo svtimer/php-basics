@@ -34,3 +34,13 @@ function totalsByCategory(array $expenses): array
 
     return $totals;
 }
+
+function sumForCategory(array $expenses, string $category): int
+{
+    $filtered = array_filter(
+        $expenses,
+        fn($expense) => $category === $expense['category'],
+    );
+
+    return array_sum(array_column($filtered, 'amount'));
+}
