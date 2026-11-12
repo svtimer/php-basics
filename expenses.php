@@ -56,3 +56,14 @@ function filterByMonth(array $expenses, string $month): array
 
     return $filtered;
 }
+
+function topCategories(array $expenses, int $limit = 3): array
+{
+    $totals = totalsByCategory($expenses);
+    uksort($totals, fn($a, $b)
+        => $totals[$a] === $totals[$b]
+        ? strcmp($a, $b)
+        : $totals[$b] <=> $totals[$a]);
+
+    return array_slice($totals, 0, max(0, min($limit, 3)));
+}
