@@ -67,3 +67,53 @@ function topCategories(array $expenses, int $limit = 3): array
 
     return array_slice($totals, 0, max(0, min($limit, 3)));
 }
+
+function renderReport(array $expenses, ?string $month = null): string
+{
+    $line        = str_repeat("-", 23) . PHP_EOL;
+    $columnNames = sprintf('%-15s %7s', 'Category', 'Amount')
+                   . PHP_EOL;
+    if ($month === null || $month === '') {
+        $output           = 'Расходы за всё время' . PHP_EOL;
+        $output           .= $columnNames;
+        $output           .= $line;
+        $totalsByCategory = totalsByCategory($expenses);
+        uksort($totalsByCategory, fn($a, $b)
+            => $totalsByCategory[$a] === $totalsByCategory[$b]
+            ? strcmp($a, $b)
+            : $totalsByCategory[$b] <=> $totalsByCategory[$a]);
+        foreach ($totalsByCategory as $category => $amount) {
+            $output .= sprintf('%-15s %7s', $category, formatMoney($amount))
+                       . PHP_EOL;
+        }
+        $output .= $line;
+        $output .= sprintf(
+                       '%-15s %7s',
+                       'Total',
+                       formatMoney(array_sum($totalsByCategory)),
+                   ) . PHP_EOL;
+    } else {
+        $output           = 'Расходы за ' . $month . PHP_EOL;
+        $output           .= $columnNames;
+        $output           .= $line;
+        $totalsByCategory = totalsByCategory(
+            filterByMonth($expenses, $month),
+        );
+        uksort($totalsByCategory, fn($a, $b)
+            => $totalsByCategory[$a] === $totalsByCategory[$b]
+            ? strcmp($a, $b)
+            : $totalsByCategory[$b] <=> $totalsByCategory[$a]);
+        foreach ($totalsByCategory as $category => $amount) {
+            $output .= sprintf('%-15s %7s', $category, formatMoney($amount))
+                       . PHP_EOL;
+        }
+        $output .= $line;
+        $output .= sprintf(
+                       '%-15s %7s',
+                       'Total',
+                       formatMoney(array_sum($totalsByCategory)),
+                   ) . PHP_EOL;
+    }
+
+    return $output;
+}
