@@ -131,3 +131,33 @@ function renderTOP(array $expenses, int $limit = 3): string
 
     return $output;
 }
+
+function runCommand(array $argv, array $expenses): ?string
+{
+    $command = $argv[1] ?? '';
+    $arg     = $argv[2] ?? null;
+    $limit   = $arg === null ? 3 : (int)$arg;
+    $output  = match ($command) {
+        'report' => renderReport($expenses, $arg),
+        'top' => renderTOP($expenses, $limit),
+        'category' => ($arg === null || $arg === '')
+            ? null
+            : $arg . ': ' . formatMoney(sumForCategory($expenses, $arg))
+              . PHP_EOL,
+        default => null,
+    };
+
+    return $output;
+}
+
+$result = runCommand($argv, $expenses);
+if ($result === null) {
+    fwrite(
+        STDERR,
+        "Usage: php {$argv[0]} report [YYYY-MM] | top [N] | category <name>"
+        . PHP_EOL,
+    );
+    exit(1);
+}
+
+echo $result;
