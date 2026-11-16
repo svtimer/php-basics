@@ -117,3 +117,17 @@ function renderReport(array $expenses, ?string $month = null): string
 
     return $output;
 }
+
+function renderTOP(array $expenses, int $limit = 3): string
+{
+    $top    = topCategories($expenses, $limit);
+    $num    = 0;
+    $output = '';
+    foreach ($top as $category => $amount) {
+        ++$num;
+        $output .= $num . '. ' . $category . ' - ' . formatMoney($amount)
+                   . PHP_EOL;
+    }
+
+    return $output;
+}
