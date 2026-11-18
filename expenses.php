@@ -17,11 +17,10 @@ $expenses = [
 
 function formatMoney(int $kopecks = 0): string
 {
-    $amount    = intdiv($kopecks, 100);
-    $kopecks   = $kopecks % 100;
-    $formatted = sprintf('%d.%02d', $amount, $kopecks);
+    $amount  = intdiv($kopecks, 100);
+    $kopecks = $kopecks % 100;
 
-    return $formatted;
+    return sprintf('%d.%02d', $amount, $kopecks);
 }
 
 function totalsByCategory(array $expenses): array
@@ -47,14 +46,12 @@ function sumForCategory(array $expenses, string $category): int
 
 function filterByMonth(array $expenses, string $month): array
 {
-    $filtered = array_values(
+    return array_values(
         array_filter(
             $expenses,
             fn($expense) => str_starts_with($expense['date'], $month),
         ),
     );
-
-    return $filtered;
 }
 
 function topCategories(array $expenses, int $limit = 3): array
@@ -70,50 +67,31 @@ function topCategories(array $expenses, int $limit = 3): array
 
 function renderReport(array $expenses, ?string $month = null): string
 {
-    $line        = str_repeat("-", 23) . PHP_EOL;
-    $columnNames = sprintf('%-15s %7s', 'Category', 'Amount')
+    $existDate        = $month === null || $month === "";
+    $line             = str_repeat("-", 23) . PHP_EOL;
+    $totalsByCategory = totalsByCategory(
+        $existDate ? $expenses : filterByMonth($expenses, $month),
+    );
+    uksort($totalsByCategory, fn($a, $b)
+        => $totalsByCategory[$a] === $totalsByCategory[$b]
+        ? strcmp($a, $b)
+        : $totalsByCategory[$b] <=> $totalsByCategory[$a]);
+    $output = ($existDate ? 'Расходы за все время' : 'Расходы за ' . $month)
+              . PHP_EOL;
+    $output .= sprintf('%-15s %7s', 'Category', 'Amount')
+               . PHP_EOL;
+    $output .= $line;
+    foreach ($totalsByCategory as $category => $amount) {
+        $output .= sprintf('%-15s %7s', $category, formatMoney($amount))
                    . PHP_EOL;
-    if ($month === null || $month === '') {
-        $output           = 'Расходы за всё время' . PHP_EOL;
-        $output           .= $columnNames;
-        $output           .= $line;
-        $totalsByCategory = totalsByCategory($expenses);
-        uksort($totalsByCategory, fn($a, $b)
-            => $totalsByCategory[$a] === $totalsByCategory[$b]
-            ? strcmp($a, $b)
-            : $totalsByCategory[$b] <=> $totalsByCategory[$a]);
-        foreach ($totalsByCategory as $category => $amount) {
-            $output .= sprintf('%-15s %7s', $category, formatMoney($amount))
-                       . PHP_EOL;
-        }
-        $output .= $line;
-        $output .= sprintf(
-                       '%-15s %7s',
-                       'Total',
-                       formatMoney(array_sum($totalsByCategory)),
-                   ) . PHP_EOL;
-    } else {
-        $output           = 'Расходы за ' . $month . PHP_EOL;
-        $output           .= $columnNames;
-        $output           .= $line;
-        $totalsByCategory = totalsByCategory(
-            filterByMonth($expenses, $month),
-        );
-        uksort($totalsByCategory, fn($a, $b)
-            => $totalsByCategory[$a] === $totalsByCategory[$b]
-            ? strcmp($a, $b)
-            : $totalsByCategory[$b] <=> $totalsByCategory[$a]);
-        foreach ($totalsByCategory as $category => $amount) {
-            $output .= sprintf('%-15s %7s', $category, formatMoney($amount))
-                       . PHP_EOL;
-        }
-        $output .= $line;
-        $output .= sprintf(
-                       '%-15s %7s',
-                       'Total',
-                       formatMoney(array_sum($totalsByCategory)),
-                   ) . PHP_EOL;
     }
+
+    $output .= $line;
+    $output .= sprintf(
+                   '%-15s %7s',
+                   'Total',
+                   formatMoney(array_sum($totalsByCategory)),
+               ) . PHP_EOL;
 
     return $output;
 }
@@ -137,7 +115,8 @@ function runCommand(array $argv, array $expenses): ?string
     $command = $argv[1] ?? '';
     $arg     = $argv[2] ?? null;
     $limit   = $arg === null ? 3 : (int)$arg;
-    $output  = match ($command) {
+
+    return match ($command) {
         'report' => renderReport($expenses, $arg),
         'top' => renderTOP($expenses, $limit),
         'category' => ($arg === null || $arg === '')
@@ -146,15 +125,13 @@ function runCommand(array $argv, array $expenses): ?string
               . PHP_EOL,
         default => null,
     };
-
-    return $output;
 }
 
 $result = runCommand($argv, $expenses);
 if ($result === null) {
     fwrite(
         STDERR,
-        "Usage: php {$argv[0]} report [YYYY-MM] | top [N] | category <name>"
+        "Usage: php $argv[0] report [YYYY-MM] | top [N] | category <name>"
         . PHP_EOL,
     );
     exit(1);
