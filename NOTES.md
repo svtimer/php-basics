@@ -94,3 +94,16 @@ string(2) "42"
 **Conclusion:**
 
 `$argv` - Array of argument passed to script when running from a command line, all elements stored as array of string, first element always the name of the script
+
+### Links to my solutions practiced PHP track on the [Exercism](https://exercism.org)
+
+- [Booleans in PHP, Exercise: Annalyn's Infiltration](https://exercism.org/tracks/php/exercises/annalyns-infiltration/solutions/SvBOT)
+- [Basics of PHP Syntax , Exercise:  Lucian's Luscious Lasagna](https://exercism.org/tracks/php/exercises/lasagna/solutions/SvBOT)
+- [Arithmetic operators, integers, floating point numbers. Exercise: Pizza Pi](https://exercism.org/tracks/php/exercises/pizza-pi/solutions/SvBOT)
+- [Strings, Exercise: Highschool Sweetheart](https://exercism.org/tracks/php/exercises/sweethearts/solutions/SvBOT)
+- [Arrays, Variable-Length Arguments, Exercise: Language List](https://exercism.org/tracks/php/exercises/language-list/solutions/SvBOT)
+- [Classes, Exercise: Windowing system](https://exercism.org/tracks/php/exercises/windowing-system/solutions/SvBOT)
+- [Type Declaration, Exercise: City Office](https://exercism.org/tracks/php/exercises/city-office/solutions/SvBOT)
+- [Type Juggling, Exercise: Lucky Numbers](https://exercism.org/tracks/php/exercises/lucky-numbers/solutions/SvBOT)
+- [Converting a phrase to its acronym, Exercise: Acronym](https://exercism.org/tracks/php/exercises/acronym/solutions/SvBOT)
+- [Conversion sequence digits, Exercise: All Your Base](https://exercism.org/tracks/php/exercises/all-your-base/solutions/SvBOT)
