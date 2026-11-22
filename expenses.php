@@ -117,6 +117,15 @@ function renderCategories(array $expenses, array $categories): string
     return $output;
 }
 
+function renderMonths(array $expenses): string
+{
+    $dates = array_column($expenses, 'date');
+    $months = array_unique(array_map(fn($x) => substr($x, 0, 7), $dates));
+    sort($months);
+
+    return 'Available months for report [YYYY-MM]:' . PHP_EOL . implode(PHP_EOL, $months) . PHP_EOL;
+}
+
 function runCommand(array $argv, array $expenses): ?string
 {
     $command = $argv[1] ?? '';
@@ -128,6 +137,7 @@ function runCommand(array $argv, array $expenses): ?string
         'report' => renderReport($expenses, $arg),
         'top' => renderTOP($expenses, $limit),
         'category' => $args ? renderCategories($expenses, $args) : null,
+        'months' => renderMonths($expenses),
         default => null,
     };
 }
@@ -136,7 +146,7 @@ $result = runCommand($argv, $expenses);
 if ($result === null) {
     fwrite(
         STDERR,
-        "Usage: php $argv[0] report [YYYY-MM] | top [N] | category <name> | category <name> [name...]"
+        "Usage: php $argv[0] report [YYYY-MM] | months | top [N] | category <name> [name...]"
         . PHP_EOL,
     );
     exit(1);
