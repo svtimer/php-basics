@@ -80,7 +80,9 @@ function renderReport(array $expenses, ?string $month = null): string
         . PHP_EOL;
     $output .= $line;
     foreach ($totalsByCategory as $category => $amount) {
-        $output .= sprintf('%-15s %7s', $category, formatMoney($amount))
+        $padding = str_repeat(' ',max(0, 15 - mb_strlen($category)));
+        $output .= $category . $padding . ' '
+                   . sprintf('%7s', formatMoney($amount))
             . PHP_EOL;
     }
 
